@@ -37,9 +37,9 @@ def main():
     parser.add_argument("--probes_reduction_method", help="How to combine multiple probes: average (default) or pca - use first principal component.",
                         default="average")
     parser.add_argument("--mask", help="Explicit mask for the analysis in the form of a 3D NIFTI file (.nii or .nii.gz) in the same space and " \
-                        "dimensionality as the stat_map. If not used an implicit mask (non zero and non NaN voxels) will be used.",
+                        "dimensionality as the stat_map. If not specified an implicit mask (non zero and non NaN voxels) will be used.",
                         type=nifti_file)
-    parser.add_argument("--radius", help="Radius in mm of of the sphere used to average statistical values at the location of each probe.(default: 4mm).",
+    parser.add_argument("--radius", help="Radius in mm of of the sphere used to average statistical values at the location of each probe (default: 4mm).",
                         default=4, type=float)
     
     args = parser.parse_args()

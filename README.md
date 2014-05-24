@@ -34,12 +34,12 @@ Usage
                             pca - use first principal component.
       --mask MASK           Explicit mask for the analysis in the form of a 3D
                             NIFTI file (.nii or .nii.gz) in the same space and
-                            dimensionality as the stat_map. If not used an
+                            dimensionality as the stat_map. If not specified an
                             implicit mask (non zero and non NaN voxels) will be
                             used.
       --radius RADIUS       Radius in mm of of the sphere used to average
                             statistical values at the location of each
-                            probe.(default: 4mm).
+                            probe (default: 4mm).
 
 
 Example
