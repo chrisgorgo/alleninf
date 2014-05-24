@@ -3,6 +3,9 @@ alleninf
 
 Compare a statistical map of a brain with gene expression patterns from Allen Human Brain Atlas.
 
+Usage
+-----
+
 
     usage: alleninf [-h] [--inference_method INFERENCE_METHOD]
                     [--probes_reduction_method PROBES_REDUCTION_METHOD]
@@ -38,3 +41,19 @@ Compare a statistical map of a brain with gene expression patterns from Allen Hu
                             statistical values at the location of each
                             probe.(default: 4mm).
 
+
+Example
+-------
+
+    $ alleninf SetA-SetB_Tstat.nii.gz HTR1A --mask SetA_mean.nii.gz
+
+    Fetching probe ids for gene HTR1A
+    Found 3 probes: A_24_P97687, CUST_575_PI417557136, CUST_15880_PI416261804
+    Fetching expression values for probes A_24_P97687, CUST_575_PI417557136, CUST_15880_PI416261804
+    Found data from 3702 wells sampled across 6 donors
+    Combining information from selected probes
+    Translating locations of the wells to MNI space
+    Checking values of the provided NIFTI file at well locations
+    70 wells fall outside of the mask
+    Performing approximate random effect analysis
+    Correlation between NIFTI values and HTR1A expression averaged across donors = -0.372743 (t=-12.8453, p=5.0909e-05)
