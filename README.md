@@ -57,3 +57,5 @@ Example
     70 wells fall outside of the mask
     Performing approximate random effect analysis
     Correlation between NIFTI values and HTR1A expression averaged across donors = -0.372743 (t=-12.8453, p=5.0909e-05)
+    
+![alt tag](random_all_subjects.png)
