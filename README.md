@@ -1,7 +1,7 @@
 alleninf
 ========
 
-Compare a statistical map of a brain with gene expression patterns from Allen Human Brain Atlas.
+Compare a statistical map of a brain with gene expression patterns from [Allen Human Brain Atlas](http://human.brain-map.org/).
 
 Usage
 -----
