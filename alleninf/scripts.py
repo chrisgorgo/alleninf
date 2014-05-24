@@ -26,8 +26,7 @@ def nifti_file(string):
             raise argparse.ArgumentTypeError(msg)
     return string
 
-if __name__ == '__main__':
-    
+def main():
     parser = argparse.ArgumentParser(description="Compare a statistical map with gene expression patterns from Allen Human Brain Atlas.")
     parser.add_argument("stat_map", help="Statistical map in the form of a 3D NIFTI file (.nii or .nii.gz) in MNI space.", type=nifti_file)
     parser.add_argument("gene_name", help="Name of the gene you want to compare your map with. For list of all available genes see: " \
@@ -50,7 +49,7 @@ if __name__ == '__main__':
     print "Found %s probes: %s"%(len(probes_dict), ", ".join(probes_dict.values()))
     
     print "Fetching expression values for probes %s"%(", ".join(probes_dict.values()))
-    expression_values, well_ids, well_coordinates, donor_names = get_expression_values_from_probe_ids(probes_dict.keys())
+    expression_values, well_ids, _, donor_names = get_expression_values_from_probe_ids(probes_dict.keys())
     print "Found data from %s wells sampled across %s donors"%(len(well_ids), len(set(donor_names)))
     
     print "Combining information from selected probes"
@@ -74,11 +73,11 @@ if __name__ == '__main__':
     
     if args.inference_method == "fixed":
         print "Performing fixed effect analysis"
-        correlation_coefficient, p_value = fixed_effects(data, ["NIFTI values", "%s expression"%args.gene_name])
+        fixed_effects(data, ["NIFTI values", "%s expression"%args.gene_name])
     
     if args.inference_method == "approximate_random":
         print "Performing approximate random effect analysis"
-        average_correlation, t, p_val = approximate_random_effects(data, ["NIFTI values", "%s expression"%args.gene_name], "donor ID")
+        approximate_random_effects(data, ["NIFTI values", "%s expression"%args.gene_name], "donor ID")
     
     
     
