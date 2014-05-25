@@ -86,7 +86,7 @@ def main():
         approximate_random_effects(data, ["NIFTI values", "%s expression"%args.gene_name], "donor ID")
         
     if args.inference_method == "bayesian_random":
-        print "Performing approximate random effect analysis"
+        print "Fitting Bayesian hierarchical model"
         bayesian_random_effects(data, ["NIFTI values", "%s expression"%args.gene_name], "donor ID", args.n_samples, args.n_burnin)
     
     
