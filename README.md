@@ -8,6 +8,7 @@ Usage
 
 
     usage: alleninf [-h] [--inference_method INFERENCE_METHOD]
+	                [--n_samples N_SAMPLES] [--n_burnin N_BURNIN]
                     [--probes_reduction_method PROBES_REDUCTION_METHOD]
                     [--mask MASK] [--radius RADIUS]
                     stat_map gene_name
@@ -25,13 +26,20 @@ Usage
     
     optional arguments:
       -h, --help            show this help message and exit
-      --inference_method INFERENCE_METHOD
-                            Which model to use: fixed - fixed effects,
-                            approximate_random - approximate random effects
-                            (default).
+	  --inference_method INFERENCE_METHOD
+	                        Which model to use: fixed - fixed effects,
+	                        approximate_random - approximate random effects
+	                        (default), bayesian_random - Bayesian hierarchical
+	                        model (requires PyMC3).
+	  --n_samples N_SAMPLES
+	                        (Bayesian hierarchical model) Number of samples for
+	                        MCMC model estimation (default 2000).
+	  --n_burnin N_BURNIN   (Bayesian hierarchical model) How many of the first
+	                        samples to discard (default 500).
       --probes_reduction_method PROBES_REDUCTION_METHOD
                             How to combine multiple probes: average (default) or
-                            pca - use first principal component.
+                            pca - use first principal component (requires 
+                            scikit-learn).
       --mask MASK           Explicit mask for the analysis in the form of a 3D
                             NIFTI file (.nii or .nii.gz) in the same space and
                             dimensionality as the stat_map. If not specified an
