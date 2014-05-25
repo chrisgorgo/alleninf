@@ -7,7 +7,8 @@ import nibabel as nb
 from alleninf.api import get_probes_from_genes,\
     get_expression_values_from_probe_ids, get_mni_coordinates_from_wells
 from alleninf.data import get_values_at_locations, combine_expression_values
-from alleninf.analysis import fixed_effects, approximate_random_effects
+from alleninf.analysis import fixed_effects, approximate_random_effects,\
+    bayesian_random_effects
 
 def nifti_file(string):
     if not os.path.exists(string):
@@ -32,9 +33,14 @@ def main():
     parser.add_argument("gene_name", help="Name of the gene you want to compare your map with. For list of all available genes see: " \
                         "http://help.brain-map.org/download/attachments/2818165/HBA_ISH_GeneList.pdf?version=1&modificationDate=1348783035873.",
                         type=str)
-    parser.add_argument("--inference_method", help="Which model to use: fixed - fixed effects, approximate_random - approximate random effects (default).",
+    parser.add_argument("--inference_method", help="Which model to use: fixed - fixed effects, approximate_random - approximate random effects (default), "\
+                        "bayesian_random - Bayesian hierarchical model (requires PyMC3).",
                         default="approximate_random")
-    parser.add_argument("--probes_reduction_method", help="How to combine multiple probes: average (default) or pca - use first principal component.",
+    parser.add_argument("--n_samples", help="(Bayesian hierarchical model) Number of samples for MCMC model estimation (default 2000).",
+                        default=2000, type=int)
+    parser.add_argument("--n_burnin", help="(Bayesian hierarchical model) How many of the first samples to discard (default 500).",
+                        default=4, type=float)
+    parser.add_argument("--probes_reduction_method", help="How to combine multiple probes: average (default) or pca - use first principal component (requires scikit-learn).",
                         default="average")
     parser.add_argument("--mask", help="Explicit mask for the analysis in the form of a 3D NIFTI file (.nii or .nii.gz) in the same space and " \
                         "dimensionality as the stat_map. If not specified an implicit mask (non zero and non NaN voxels) will be used.",
@@ -78,6 +84,11 @@ def main():
     if args.inference_method == "approximate_random":
         print "Performing approximate random effect analysis"
         approximate_random_effects(data, ["NIFTI values", "%s expression"%args.gene_name], "donor ID")
+        
+    if args.inference_method == "bayesian_random":
+        print "Performing approximate random effect analysis"
+        bayesian_random_effects(data, ["NIFTI values", "%s expression"%args.gene_name], "donor ID", args.n_samples, args.n_burnin)
     
     
-    
+if __name__ == '__main__':
+    main()
