@@ -27,7 +27,7 @@ def approximate_random_effects(data, labels, group):
     t, p_val = ttest_1samp(correlation_per_donor.values(), 0)
     print "Averaged slope across donors = %g (t=%g, p=%g)"%(average_slope, t, p_val)
     sns.violinplot([correlation_per_donor.values()], inner="points", names=["donors"])
-    plt.ylabel("Correlation between %s and %s"%(labels[0],labels[1]))
+    plt.ylabel("Linear regression slopes"%(labels[0],labels[1]))
     plt.axhline(0, color="red")
     
     sns.lmplot(labels[0], labels[1], data, hue=group, col=group, col_wrap=3)
@@ -35,7 +35,7 @@ def approximate_random_effects(data, labels, group):
     
     return average_slope, t, p_val
 
-def bayesian_random_effects(data, labels, group, n_samples=2000, n_burinin=500):
+def bayesian_random_effects(data, labels, group, n_samples=2000, n_burnin=500):
     import pymc as pm
     #preparing the data
     donors = data[group].unique()
@@ -67,27 +67,28 @@ def bayesian_random_effects(data, labels, group, n_samples=2000, n_burinin=500):
         step = pm.NUTS(scaling=start)
         hierarchical_trace = pm.sample(n_samples, step, start=start, progressbar=True)
         
-    mean_slope = hierarchical_trace['group slope (mean)'][n_burinin:].mean()
-    zero_percentile = percentileofscore(hierarchical_trace['group slope (mean)'][n_burinin:], 0)
+    mean_slope = hierarchical_trace['group slope (mean)'][n_burnin:].mean()
+    zero_percentile = percentileofscore(hierarchical_trace['group slope (mean)'][n_burnin:], 0)
     print "Mean group level slope was %g (zero was %g percentile of the posterior distribution)"%(mean_slope, zero_percentile)
         
-    pm.traceplot(hierarchical_trace[n_burinin:])
+    pm.traceplot(hierarchical_trace[n_burnin:])
     
     selection = donors
     fig, axis = plt.subplots(2, 3, figsize=(12, 6), sharey=True, sharex=True)
     axis = axis.ravel()
+    xvals = np.linspace(data[labels[0]].min(), data[labels[0]].max())
     for i, c in enumerate(selection):
-        c_data = data.ix[data["donor ID"] == c]
+        c_data = data.ix[data[group] == c]
         c_data = c_data.reset_index(drop = True)
         z = list(c_data['donor_code'])[0]
-    
-        xvals = np.linspace(-8, 4)
-        for a_val, b_val in zip(hierarchical_trace['individual intercepts'][500::10][z], hierarchical_trace['individual slopes'][500::10][z]):
+        for a_val, b_val in zip(hierarchical_trace['individual intercepts'][n_burnin::10][z], hierarchical_trace['individual slopes'][n_burnin::10][z]):
             axis[i].plot(xvals, a_val + b_val * xvals, 'g', alpha=.1)
-        axis[i].plot(xvals, hierarchical_trace['individual intercepts'][500::10][z].mean() + hierarchical_trace['individual slopes'][500::10][z].mean() * xvals, 
+        axis[i].plot(xvals, hierarchical_trace['individual intercepts'][n_burnin:][z].mean() + hierarchical_trace['individual slopes'][n_burnin:][z].mean() * xvals, 
                      'g', alpha=1, lw=2.)
         axis[i].hexbin(c_data[labels[0]], c_data[labels[1]], mincnt=1, cmap=plt.cm.YlOrRd_r)
         axis[i].set_title(c)
+        axis[i].set_xlabel(labels[0])
+        axis[i].set_ylabel(labels[1])
         
     plt.show()
         
