@@ -3,6 +3,11 @@ alleninf
 
 Compare a statistical map of a brain with gene expression patterns from [Allen Human Brain Atlas](http://human.brain-map.org/).
 
+Installation
+------------
+
+    pip install git+https://github.com/chrisfilo/alleninf.git
+
 Usage
 -----
 
