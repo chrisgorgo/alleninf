@@ -27,7 +27,7 @@ def approximate_random_effects(data, labels, group):
     t, p_val = ttest_1samp(correlation_per_donor.values(), 0)
     print "Averaged slope across donors = %g (t=%g, p=%g)"%(average_slope, t, p_val)
     sns.violinplot([correlation_per_donor.values()], inner="points", names=["donors"])
-    plt.ylabel("Linear regression slopes"%(labels[0],labels[1]))
+    plt.ylabel("Linear regression slopes between %s and %s"%(labels[0],labels[1]))
     plt.axhline(0, color="red")
     
     sns.lmplot(labels[0], labels[1], data, hue=group, col=group, col_wrap=3)
@@ -70,6 +70,8 @@ def bayesian_random_effects(data, labels, group, n_samples=2000, n_burnin=500):
     mean_slope = hierarchical_trace['group slope (mean)'][n_burnin:].mean()
     zero_percentile = percentileofscore(hierarchical_trace['group slope (mean)'][n_burnin:], 0)
     print "Mean group level slope was %g (zero was %g percentile of the posterior distribution)"%(mean_slope, zero_percentile)
+    
+    pm.summary(hierarchical_trace[n_burnin:], vars=['group slope (mean)'])
         
     pm.traceplot(hierarchical_trace[n_burnin:])
     

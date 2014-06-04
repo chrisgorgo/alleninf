@@ -39,7 +39,7 @@ def main():
     parser.add_argument("--n_samples", help="(Bayesian hierarchical model) Number of samples for MCMC model estimation (default 2000).",
                         default=2000, type=int)
     parser.add_argument("--n_burnin", help="(Bayesian hierarchical model) How many of the first samples to discard (default 500).",
-                        default=4, type=float)
+                        default=500, type=float)
     parser.add_argument("--probes_reduction_method", help="How to combine multiple probes: average (default) or pca - use first principal component (requires scikit-learn).",
                         default="average")
     parser.add_argument("--mask", help="Explicit mask for the analysis in the form of a 3D NIFTI file (.nii or .nii.gz) in the same space and " \
