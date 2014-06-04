@@ -29,7 +29,7 @@ def nifti_file(string):
 
 def main():
     parser = argparse.ArgumentParser(description="Compare a statistical map with gene expression patterns from Allen Human Brain Atlas.")
-    parser.add_argument("stat_map", help="Statistical map in the form of a 3D NIFTI file (.nii or .nii.gz) in MNI space.", type=nifti_file)
+    parser.add_argument("stat_map", help="Unthresholded statistical map in the form of a 3D NIFTI file (.nii or .nii.gz) in MNI space.", type=nifti_file)
     parser.add_argument("gene_name", help="Name of the gene you want to compare your map with. For list of all available genes see: " \
                         "http://help.brain-map.org/download/attachments/2818165/HBA_ISH_GeneList.pdf?version=1&modificationDate=1348783035873.",
                         type=str)
