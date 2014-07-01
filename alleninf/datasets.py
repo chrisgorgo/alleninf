@@ -546,7 +546,7 @@ def _tree(path, pattern=None, dictionary=False):
 # Dataset downloading functions
 
     
-def fetch_microarray_exression(data_dir=None, url=None, resume=True,
+def fetch_microarray_expression(data_dir=None, url=None, resume=True,
         verbose=0):
     """
     """

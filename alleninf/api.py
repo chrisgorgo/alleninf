@@ -1,10 +1,10 @@
 import json
 import urllib2
 import os
-from tables import openFile
+from tables import open_file
 import pandas as pd
 import numpy as np
-from alleninf.datasets import fetch_microarray_exression
+from alleninf.datasets import fetch_microarray_expression
 
 api_url = "http://api.brain-map.org/api/v2/data/query.json"
 
@@ -54,14 +54,16 @@ def get_expression_values_from_probe_ids_restapi(probe_ids):
     return expression_values, well_ids, donor_names
 
 def get_expression_values_from_probe_ids_hdf(probe_ids):
-    files = fetch_microarray_exression()
+    files = fetch_microarray_expression()
     hdf_file = files.microarray_expression
-    probe_ids = ["'%s'"%probe_id for probe_id in probe_ids]
-    where_query = "index in [%s]"%(",".join(probe_ids))
-        
-    h_handle = openFile(hdf_file, "r")
+   
+    h_handle = open_file(hdf_file, "r")
     donors = [g._v_name for g in list(h_handle.walkGroups("/"))[1:]]
     h_handle.close()
+    
+    probe_ids = ["'%s'"%probe_id for probe_id in probe_ids]
+    where_query = "index in [%s]"%(",".join(probe_ids))
+    
     expression_values = []
     well_ids = []
     donor_names = []
