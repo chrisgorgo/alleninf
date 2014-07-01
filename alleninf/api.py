@@ -1,7 +1,10 @@
 import json
 import urllib2
 import os
+from tables import openFile
 import pandas as pd
+import numpy as np
+from alleninf.datasets import fetch_microarray_exression
 
 api_url = "http://api.brain-map.org/api/v2/data/query.json"
 
@@ -28,7 +31,13 @@ def get_probes_from_genes(gene_names):
     
     return d
 
-def get_expression_values_from_probe_ids(probe_ids):
+def get_expression_values_from_probe_ids(probe_ids, restapi=True):
+    if restapi:
+        return get_expression_values_from_probe_ids_restapi(probe_ids)
+    else:
+        return get_expression_values_from_probe_ids_hdf(probe_ids)
+
+def get_expression_values_from_probe_ids_restapi(probe_ids):
     if not isinstance(probe_ids,list):
         probe_ids = [probe_ids]
     #in case there are white spaces in gene names
@@ -42,7 +51,28 @@ def get_expression_values_from_probe_ids(probe_ids):
     donor_names = [sample["donor"]["name"] for sample in data["msg"]["samples"]]
     well_coordinates = [sample["sample"]["mri"] for sample in data["msg"]["samples"]]
     
-    return expression_values, well_ids, well_coordinates, donor_names
+    return expression_values, well_ids, donor_names
+
+def get_expression_values_from_probe_ids_hdf(probe_ids):
+    files = fetch_microarray_exression()
+    hdf_file = files.microarray_expression
+    probe_ids = ["'%s'"%probe_id for probe_id in probe_ids]
+    where_query = "index in [%s]"%(",".join(probe_ids))
+        
+    h_handle = openFile(hdf_file, "r")
+    donors = [g._v_name for g in list(h_handle.walkGroups("/"))[1:]]
+    h_handle.close()
+    expression_values = []
+    well_ids = []
+    donor_names = []
+    for donor in donors:
+        df = pd.read_hdf(hdf_file, donor, where=where_query,close=True)
+        well_ids += [int(col[len("well_id_"):]) for col in df.columns]
+        donor_names += [donor,]*len(df.columns)
+        expression_values.append(np.array(df))
+    
+    expression_values = list(np.concatenate(expression_values,axis=1))
+    return expression_values, well_ids, donor_names
 
 def get_mni_coordinates_from_wells(well_ids):
     package_directory = os.path.dirname(os.path.abspath(__file__))
@@ -51,7 +81,7 @@ def get_mni_coordinates_from_wells(well_ids):
     return list(frame.ix[well_ids].itertuples(index=False))
     
 if __name__ == '__main__':
-    probes_dict = get_probes_from_genes("SLC6A2")
-    expression_values, well_ids, well_coordinates, donor_names = get_expression_values_from_probe_ids(probes_dict.keys())
+    probes_dict = get_probes_from_genes("HTR1A")
+    expression_values, well_ids, donor_names = get_expression_values_from_probe_ids_hdf(probes_dict.keys())
     print get_mni_coordinates_from_wells(well_ids)
     
