@@ -1,7 +1,8 @@
 numpy
 scipy
 matplotlib
-pandas
+pandas>=0.14
+tables
 seaborn
 scikit-learn
 nibabel
