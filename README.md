@@ -26,9 +26,7 @@ Usage
 	  stat_map              Unthresholded statistical map in the form of a 3D
 	                        NIFTI file (.nii or .nii.gz) in MNI space.
 	  gene_name             Name of the gene you want to compare your map with.
-	                        For list of all available genes see: http://help
-	                        .brain-map.org/download/attachments/2818165/HBA_ISH_Ge
-	                        neList.pdf?version=1&modificationDate=1348783035873.
+	                        For list of all available genes see: http://help.brain-map.org/download/attachments/2818165/HBA_ISH_GeneList.pdf?version=1&modificationDate=1348783035873.
 	
 	optional arguments:
 	  -h, --help            show this help message and exit
