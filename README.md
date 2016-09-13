@@ -3,6 +3,7 @@ alleninf
 
 Compare an unthresholded statistical map of a brain with gene expression patterns from [Allen Human Brain Atlas](http://human.brain-map.org/). See the [OHBM 2014 poster](http://f1000research.com/posters/1097120) for more details.
 
+**This pacakge is depracated** in favour of the Gene Decoding functionality available for the maps uploaded to [NeuroVault](http://NeuroVault.org).
 Installation
 ------------
 
