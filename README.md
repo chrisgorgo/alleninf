@@ -80,10 +80,10 @@ FAQ
 ---
 
 ### Why is alleninf using different coordinates than those provided by Allen Brain Institute? ###
-he coordinates reported by Allen Brain Institute were calculated using an affine coregistration of donor brain T1s to the MNI atlas. We used ANTa to perform a much more accurate non linear corregistration.
+The coordinates reported by Allen Brain Institute were calculated using an affine coregistration of donor brain T1s to the MNI atlas. We used ANTs to perform a much more accurate non linear corregistration.
 In particular T1 scans of the six cadaver brains were coregistered to MNI 152 1mm template. 
 The coregistration consisted of four steps (translation, rigid body, affine and 
 nonlinear deformation field) and was performed using ANTs (Avants et al., 
 2011). Visual inspection revealed that one of the scans (H0351.1016) suffers 
 from deformed cerebellum and required manual adjustments of the 
-coregistration procedure (separate registration of cerebellum)
+coregistration procedure (separate registration of cerebellum).
